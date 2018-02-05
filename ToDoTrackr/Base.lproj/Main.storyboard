@@ -17,22 +17,22 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="toDoListItemCell" id="LcH-35-3h8" customClass="ToDoListItemCell" customModule="ToDoTrackr" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="LcH-35-3h8" id="2xa-Ab-t97">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
                         <connections>
                             <outlet property="dataSource" destination="YOL-CY-DoX" id="avr-sy-Khl"/>
                             <outlet property="delegate" destination="YOL-CY-DoX" id="YXq-BN-6xc"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="ToDoTrackr" id="JHf-4s-1xS"/>
+                    <navigationItem key="navigationItem" title="ToDoTrackr" id="JHf-4s-1xS">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="9I8-SH-Xvf">
+                            <color key="tintColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <connections>
+                                <action selector="addButtonPressed:" destination="YOL-CY-DoX" id="VOM-vN-pwT"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="todosTableView" destination="xYn-jy-ysx" id="Iua-Fx-t89"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sHD-vp-hho" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

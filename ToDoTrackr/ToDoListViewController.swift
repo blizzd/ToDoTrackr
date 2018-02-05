@@ -10,12 +10,14 @@ import UIKit
 
 class ToDoListViewController: UITableViewController{
 
-    let itemArray = ["Find Mike", "Buy Eggos", "Destroy Demogorgon"]
+    var itemArray = ["Find Mike", "Buy Eggos", "Destroy Demogorgon"]
+    
+    @IBOutlet var todosTableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        todosTableView.register(UINib(nibName: "ToDoListItemCell", bundle: nil), forCellReuseIdentifier: "toDoListItemCell")
         
     }
 
@@ -30,7 +32,7 @@ class ToDoListViewController: UITableViewController{
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "toDoListItemCell", for: indexPath) as! ToDoListItemCell
         
-        cell.toDoLabel?.text = itemArray[indexPath.row]
+        cell.toDoLabel.text = itemArray[indexPath.row]
         
         return cell
     }
@@ -49,6 +51,45 @@ class ToDoListViewController: UITableViewController{
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
+    //MARK - Add new items
+    
+    @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
+        
+        var textField = UITextField()
+        
+        let alert = UIAlertController(title: "Add New ToDo Item(s)", message: "", preferredStyle: .alert)
+        
+        let action = UIAlertAction(title: "Add Item(s)", style: .default) {
+            (action) in
+         //once the user clicks the Add Item, this happens
+            print("\(String(describing: textField.text?.split(separator: ",")))")
+            
+            if let textString = textField.text {
+                let textArray = textString.split(separator: ",")
+                
+                if textArray.isEmpty {
+                  self.itemArray.append("Something new")
+                } else {
+                    textArray.forEach {
+                        (text) in
+                        self.itemArray.append(String(text))
+                    }
+                }
+            }
+            
+            self.tableView.reloadData()
+        }
+        
+        alert.addTextField{ (alertTextField) in
+            alertTextField.placeholder = "Create new item"
+            textField = alertTextField
+        }
+        
+        alert.addAction(action)
+        
+        present(alert, animated: true, completion: nil)
+        
+    }
     
 
 
