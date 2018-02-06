@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ToDoListItemModel {
+class ToDoListItemModel: Codable {
     
     var listItemEntry : String = "Something new"
     var checkedItem : Bool = false

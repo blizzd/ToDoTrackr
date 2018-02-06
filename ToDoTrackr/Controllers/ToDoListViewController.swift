@@ -11,20 +11,20 @@ import UIKit
 class ToDoListViewController: UITableViewController{
 
     var itemArray = [ToDoListItemModel]()
+    var dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("ToDoItems.plist", isDirectory: false)
+    
     
     let defaults = UserDefaults.standard
     let TODO_LIST_NAME = "TodoListArray"
+    let fileEncoder = PropertyListEncoder()
+    let fileDecoder = PropertyListDecoder()
     
     @IBOutlet var todosTableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let introItem = ToDoListItemModel ()
-        introItem.listItemEntry = "Start entering your notes"
-        introItem.checkedItem = false
-        
-        itemArray.append(introItem)
+        loadUserData()
         
         todosTableView.register(UINib(nibName: "ToDoListItemCell", bundle: nil), forCellReuseIdentifier: "toDoListItemCell")
         
@@ -56,7 +56,7 @@ class ToDoListViewController: UITableViewController{
         
         itemCell.checkedItem = !itemCell.checkedItem
         
-        tableView.cellForRow(at: indexPath)?.accessoryType = itemCell.checkedItem == true ? .checkmark : .none
+        saveUserData()
         
         tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -93,7 +93,7 @@ class ToDoListViewController: UITableViewController{
                 }
             }
             
-            self.tableView.reloadData()
+            self.saveUserData()
         }
         
         alert.addTextField{ (alertTextField) in
@@ -107,6 +107,30 @@ class ToDoListViewController: UITableViewController{
         
     }
     
+    //MARK: - Model manipulation
+    
+    func saveUserData() {
+        do {
+            let encodableData = try fileEncoder.encode(itemArray)
+            try encodableData.write(to: dataFilePath!)
+        } catch {
+            print("Error encoding item array, \(error)")
+        }
+        
+        
+        self.tableView.reloadData()
+    }
+    
+    func loadUserData() {
+        if let decodableData = try? Data(contentsOf: dataFilePath!) {
+            do {
+                itemArray = try fileDecoder.decode([ToDoListItemModel].self, from: decodableData)
+            } catch {
+                print("Error decoding item array, \(error)")
+            }
+        }
+       
+    }
 
 
 }
