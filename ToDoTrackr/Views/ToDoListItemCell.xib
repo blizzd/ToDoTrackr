@@ -17,22 +17,24 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="toDoListItemCell" id="vuX-Q9-5Tk" customClass="ToDoListItemCell" customModule="ToDoTrackr" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+            <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="vuX-Q9-5Tk" id="EIU-Bd-bra">
-                <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="375" height="49.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="6Se-ie-lIc">
-                        <rect key="frame" x="10" y="0.0" width="365" height="38.5"/>
+                        <rect key="frame" x="10" y="0.0" width="360" height="40"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="360" id="3J9-HW-vz9"/>
+                            <constraint firstAttribute="height" constant="40" id="KaZ-pJ-Yyi"/>
+                        </constraints>
                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="trailing" secondItem="6Se-ie-lIc" secondAttribute="trailing" id="EXy-3L-2Wu"/>
-                    <constraint firstAttribute="bottom" secondItem="6Se-ie-lIc" secondAttribute="bottom" constant="5" id="Zvm-DW-c5c"/>
                     <constraint firstItem="6Se-ie-lIc" firstAttribute="top" secondItem="EIU-Bd-bra" secondAttribute="top" id="eyq-6D-Ac4"/>
                     <constraint firstItem="6Se-ie-lIc" firstAttribute="leading" secondItem="EIU-Bd-bra" secondAttribute="leading" constant="10" id="qwp-0W-qiA"/>
                 </constraints>
