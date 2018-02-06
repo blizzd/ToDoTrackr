@@ -13,13 +13,14 @@ class ToDoListViewController: UITableViewController{
     var itemArray = ["Find Mike", "Buy Eggos", "Destroy Demogorgon"]
     
     let defaults = UserDefaults.standard
+    let TODO_LIST_NAME = "TodoListArray"
     
     @IBOutlet var todosTableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let items = defaults.array(forKey: "TodoListArray") as? [String] {
+        if let items = defaults.array(forKey: TODO_LIST_NAME) as? [String] {
             itemArray = items
         }
         
@@ -83,7 +84,7 @@ class ToDoListViewController: UITableViewController{
                 }
             }
             
-            self.defaults.set(self.itemArray, forKey: "TodoListArray")
+            self.defaults.set(self.itemArray, forKey: self.TODO_LIST_NAME)
             
             self.tableView.reloadData()
         }
