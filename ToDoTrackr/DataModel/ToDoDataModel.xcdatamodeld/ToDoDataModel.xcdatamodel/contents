@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13772" systemVersion="17D47" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="ToDoCategoryModel" representedClassName="ToDoCategoryModel" syncable="YES" codeGenerationType="class">
+        <attribute name="categoryName" attributeType="String" syncable="YES"/>
+        <relationship name="todoItems" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ToDoListItemModel" inverseName="parentCategory" inverseEntity="ToDoListItemModel" syncable="YES"/>
+    </entity>
+    <entity name="ToDoListItemModel" representedClassName=".ToDoListItemModel" syncable="YES" codeGenerationType="class">
+        <attribute name="checkedItem" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="listItemEntry" attributeType="String" syncable="YES"/>
+        <relationship name="parentCategory" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ToDoCategoryModel" inverseName="todoItems" inverseEntity="ToDoCategoryModel" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="ToDoListItemModel" positionX="-63" positionY="-18" width="128" height="88"/>
+        <element name="ToDoCategoryModel" positionX="-261" positionY="-9" width="128" height="73"/>
+    </elements>
+</model>

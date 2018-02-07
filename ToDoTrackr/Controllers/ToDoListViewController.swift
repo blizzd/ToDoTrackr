@@ -7,27 +7,27 @@
 //
 
 import UIKit
+import CoreData
 
 class ToDoListViewController: UITableViewController{
 
-    var itemArray = [ToDoListItemModel]()
-    var dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("ToDoItems.plist", isDirectory: false)
-    
-    
-    let defaults = UserDefaults.standard
-    let TODO_LIST_NAME = "TodoListArray"
-    let fileEncoder = PropertyListEncoder()
-    let fileDecoder = PropertyListDecoder()
+    let databaseContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     @IBOutlet var todosTableView: UITableView!
+    @IBOutlet weak var searchBar: UISearchBar!
+    
+    var itemArray = [ToDoListItemModel]()
+    var selectedCategory : ToDoCategoryModel? {
+        didSet{
+            loadUserData()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        loadUserData()
-        
-        todosTableView.register(UINib(nibName: "ToDoListItemCell", bundle: nil), forCellReuseIdentifier: "toDoListItemCell")
-        
+        todosTableView.register(UINib(nibName: "ToDoItemCell", bundle: nil), forCellReuseIdentifier: "toDoItemCell")
+
     }
 
     //MARK - Tableview Datasource methods
@@ -39,7 +39,7 @@ class ToDoListViewController: UITableViewController{
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "toDoListItemCell", for: indexPath) as! ToDoListItemCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "toDoItemCell", for: indexPath) as! ToDoItemCell
         
         let itemCell = itemArray[indexPath.row]
         
@@ -76,18 +76,22 @@ class ToDoListViewController: UITableViewController{
             
             if let textString = textField.text {
                 let textArray = textString.split(separator: ",")
-                var cellItem = ToDoListItemModel()
+                
                 
                 if textArray.isEmpty {
-                    
+                    let cellItem = ToDoListItemModel(context: self.databaseContext)
                     cellItem.listItemEntry = "Something new"
+                    cellItem.checkedItem = false
+                    cellItem.parentCategory = self.selectedCategory
                     self.itemArray.append(cellItem)
                     
                 } else {
                     textArray.forEach {
                         (text) in
-                            cellItem = ToDoListItemModel()
+                        let cellItem = ToDoListItemModel(context: self.databaseContext)
                             cellItem.listItemEntry = String(text.trimmingCharacters(in: .whitespacesAndNewlines))
+                            cellItem.checkedItem = false
+                            cellItem.parentCategory = self.selectedCategory
                             self.itemArray.append(cellItem)
                     }
                 }
@@ -111,27 +115,32 @@ class ToDoListViewController: UITableViewController{
     
     func saveUserData() {
         do {
-            let encodableData = try fileEncoder.encode(itemArray)
-            try encodableData.write(to: dataFilePath!)
+           try databaseContext.save()
         } catch {
-            print("Error encoding item array, \(error)")
+            print("Error saving database, \(error)")
         }
         
         
-        self.tableView.reloadData()
+        tableView.reloadData()
     }
     
-    func loadUserData() {
-        if let decodableData = try? Data(contentsOf: dataFilePath!) {
-            do {
-                itemArray = try fileDecoder.decode([ToDoListItemModel].self, from: decodableData)
-            } catch {
-                print("Error decoding item array, \(error)")
-            }
+    func loadUserData(with request: NSFetchRequest<ToDoListItemModel> = ToDoListItemModel.fetchRequest(), andPredicate predicate: NSPredicate? = nil) {
+        let categoryPredicate = NSPredicate(format: "parentCategory.categoryName MATCHES %@", selectedCategory!.categoryName!)
+        
+        if let additionalPredicate = predicate {
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, additionalPredicate])
+        } else {
+            request.predicate = categoryPredicate
         }
+        
+        do {
+                itemArray = try databaseContext.fetch(request)
+            } catch {
+                print("Error loading database, \(error)")
+            }
+        tableView.reloadData()
        
     }
-
 
 }
 

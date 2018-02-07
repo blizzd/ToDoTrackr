@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ToDoListItemCell: UITableViewCell {
+class ToDoItemCell: UITableViewCell {
 
     @IBOutlet weak var toDoLabel: UILabel!
     
