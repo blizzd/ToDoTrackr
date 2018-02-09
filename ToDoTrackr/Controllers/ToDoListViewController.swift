@@ -7,16 +7,15 @@
 //
 
 import UIKit
-import CoreData
+import RealmSwift
 
 class ToDoListViewController: UITableViewController{
 
-    let databaseContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    let realm = try! Realm()
     
-    @IBOutlet var todosTableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
     
-    var itemArray = [ToDoListItemModel]()
+    var toDoItems: Results<ToDoListItemModel>?
     var selectedCategory : ToDoCategoryModel? {
         didSet{
             loadUserData()
@@ -26,7 +25,7 @@ class ToDoListViewController: UITableViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        todosTableView.register(UINib(nibName: "ToDoItemCell", bundle: nil), forCellReuseIdentifier: "toDoItemCell")
+        tableView.register(UINib(nibName: "ToDoItemCell", bundle: nil), forCellReuseIdentifier: "toDoItemCell")
 
     }
 
@@ -34,17 +33,20 @@ class ToDoListViewController: UITableViewController{
     //************************************//
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return itemArray.count
+        return toDoItems?.count ?? 1
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "toDoItemCell", for: indexPath) as! ToDoItemCell
         
-        let itemCell = itemArray[indexPath.row]
+        if let itemCell = toDoItems?[indexPath.row] {
         
-        cell.toDoLabel.text = itemCell.listItemEntry
-        cell.accessoryType = itemCell.checkedItem == true ? .checkmark : .none
+            cell.toDoLabel.text = itemCell.listItemEntry
+            cell.accessoryType = itemCell.checkedItem == true ? .checkmark : .none
+        } else {
+            cell.toDoLabel.text = "No Items Added"
+        }
         
         return cell
     }
@@ -52,12 +54,17 @@ class ToDoListViewController: UITableViewController{
     //MARK - Tableview Delegate methods
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let itemCell = itemArray[indexPath.row]
-        
-        itemCell.checkedItem = !itemCell.checkedItem
-        
-        saveUserData()
-        
+        if let itemCell = toDoItems?[indexPath.row] {
+            do {
+                try realm.write {
+                    itemCell.checkedItem = !itemCell.checkedItem
+                }
+            
+            } catch {
+                print("Error saving status \(error)")
+            }
+        }
+        tableView.reloadData()
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
@@ -74,30 +81,47 @@ class ToDoListViewController: UITableViewController{
          //once the user clicks the Add Item, this happens
             print("\(String(describing: textField.text?.split(separator: ",")))")
             
-            if let textString = textField.text {
-                let textArray = textString.split(separator: ",")
-                
-                
-                if textArray.isEmpty {
-                    let cellItem = ToDoListItemModel(context: self.databaseContext)
-                    cellItem.listItemEntry = "Something new"
-                    cellItem.checkedItem = false
-                    cellItem.parentCategory = self.selectedCategory
-                    self.itemArray.append(cellItem)
+            if let currentCategory = self.selectedCategory {
+            
+                //for any valid user input, we take the string and separate it so we can create mutiple entries
+                if let textString = textField.text {
+                    let textArray = textString.split(separator: ",")
                     
-                } else {
-                    textArray.forEach {
-                        (text) in
-                        let cellItem = ToDoListItemModel(context: self.databaseContext)
-                            cellItem.listItemEntry = String(text.trimmingCharacters(in: .whitespacesAndNewlines))
-                            cellItem.checkedItem = false
-                            cellItem.parentCategory = self.selectedCategory
-                            self.itemArray.append(cellItem)
+                    if textArray.isEmpty {
+                        do {
+                            try self.realm.write {
+                                let cellItem = ToDoListItemModel()
+                                    cellItem.listItemEntry = "Something new"
+                                    cellItem.dateCreated = Date()
+                                    currentCategory.toDoItems.append(cellItem)
+                                self.realm.add(cellItem)
+                            }
+                        } catch {
+                            print("Error saving database, \(error)")
+                        }
+                        
+                        self.tableView.reloadData()
+                        
+                    } else {
+                        textArray.forEach {
+                            (text) in
+                            do {
+                                try self.realm.write {
+                                    let cellItem = ToDoListItemModel()
+                                        cellItem.listItemEntry = String(text.trimmingCharacters(in: .whitespacesAndNewlines))
+                                        cellItem.dateCreated = Date()
+                                        currentCategory.toDoItems.append(cellItem)
+                                    self.realm.add(cellItem)
+                                }
+                            } catch {
+                                print("Error saving database, \(error)")
+                            }
+                            
+                            self.tableView.reloadData()
+                        }
                     }
                 }
             }
-            
-            self.saveUserData()
         }
         
         alert.addTextField{ (alertTextField) in
@@ -112,33 +136,24 @@ class ToDoListViewController: UITableViewController{
     }
     
     //MARK: - Model manipulation
-    
-    func saveUserData() {
+    func saveUserData(_ item: ToDoListItemModel) {
         do {
-           try databaseContext.save()
+            try realm.write {
+                realm.add(item)
+            }
         } catch {
             print("Error saving database, \(error)")
         }
         
-        
         tableView.reloadData()
     }
     
-    func loadUserData(with request: NSFetchRequest<ToDoListItemModel> = ToDoListItemModel.fetchRequest(), andPredicate predicate: NSPredicate? = nil) {
-        let categoryPredicate = NSPredicate(format: "parentCategory.categoryName MATCHES %@", selectedCategory!.categoryName!)
-        
-        if let additionalPredicate = predicate {
-            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, additionalPredicate])
-        } else {
-            request.predicate = categoryPredicate
-        }
-        
-        do {
-                itemArray = try databaseContext.fetch(request)
-            } catch {
-                print("Error loading database, \(error)")
-            }
+    func loadUserData() {
+        toDoItems = selectedCategory?.toDoItems.sorted(byKeyPath: "listItemEntry", ascending: true)
         tableView.reloadData()
+        
+        //TODO: - Set View title when the user lands on a category
+        //navigationController?.title = selectedCategory?.categoryName
        
     }
 

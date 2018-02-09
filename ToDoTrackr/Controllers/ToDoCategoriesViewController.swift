@@ -7,20 +7,18 @@
 //
 
 import UIKit
-import CoreData
+import RealmSwift
 
 class ToDoCategoriesViewController: UITableViewController {
 
-    let databaseContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    let realm = try! Realm()
     
-    var categoryArray = [ToDoCategoryModel]()
-    
-    @IBOutlet var categoryTableView: UITableView!
+    var categoryItems: Results<ToDoCategoryModel>?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        categoryTableView.register(UINib(nibName: "ToDoItemCell", bundle: nil), forCellReuseIdentifier: "toDoItemCell")
+        tableView.register(UINib(nibName: "ToDoItemCell", bundle: nil), forCellReuseIdentifier: "toDoItemCell")
         
         loadCategoryData()
     }
@@ -29,16 +27,16 @@ class ToDoCategoriesViewController: UITableViewController {
 
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categoryArray.count
+        return categoryItems?.count ?? 1
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "toDoItemCell", for: indexPath) as! ToDoItemCell
         
-        let itemCell = categoryArray[indexPath.row]
+        let itemCell = categoryItems?[indexPath.row]
         
-        cell.toDoLabel.text = itemCell.categoryName
+        cell.toDoLabel.text = itemCell?.categoryName ?? "No Categories Yet"
         
         return cell
     }
@@ -48,37 +46,35 @@ class ToDoCategoriesViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: "goToList", sender: self)
         
-        categoryTableView.deselectRow(at: indexPath, animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
+    //MARK: - View transitions
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationListVC = segue.destination as! ToDoListViewController
         
-        if let indexPath = categoryTableView.indexPathForSelectedRow {
-            destinationListVC.selectedCategory = categoryArray[indexPath.row]
+        if let indexPath = tableView.indexPathForSelectedRow {
+            destinationListVC.selectedCategory = categoryItems?[indexPath.row]
         }
     }
     
     //MARK: - Data Manipulations
     
-    func saveCategoryData() {
+    func saveCategoryData(_ category: ToDoCategoryModel) {
         do {
-            try databaseContext.save()
+            try realm.write {
+                realm.add(category)
+            }
         } catch {
             print("Error saving database, \(error)")
         }
         
-        
-        categoryTableView.reloadData()
+        tableView.reloadData()
     }
     
-    func loadCategoryData(with request: NSFetchRequest<ToDoCategoryModel> = ToDoCategoryModel.fetchRequest()) {
-        do {
-            categoryArray = try databaseContext.fetch(request)
-        } catch {
-            print("Error loading database, \(error)")
-        }
-        categoryTableView.reloadData()
+    func loadCategoryData() {
+        categoryItems = realm.objects(ToDoCategoryModel.self)
+        tableView.reloadData()
         
     }
     
@@ -95,26 +91,25 @@ class ToDoCategoriesViewController: UITableViewController {
             //once the user clicks the Add Item, this happens
             print("\(String(describing: textField.text?.split(separator: ",")))")
             
+            //for any valid user input, we take the string and separate it so we can create mutiple categories
             if let textString = textField.text {
                 let textArray = textString.split(separator: ",")
                 
                 
                 if textArray.isEmpty {
-                    let cellItem = ToDoCategoryModel(context: self.databaseContext)
+                    let cellItem = ToDoCategoryModel()
                     cellItem.categoryName = "Some new category"
-                    self.categoryArray.append(cellItem)
+                    self.saveCategoryData(cellItem)
                     
                 } else {
                     textArray.forEach {
                         (text) in
-                        let cellItem = ToDoCategoryModel(context: self.databaseContext)
+                        let cellItem = ToDoCategoryModel()
                         cellItem.categoryName = String(text.trimmingCharacters(in: .whitespacesAndNewlines))
-                        self.categoryArray.append(cellItem)
+                        self.saveCategoryData(cellItem)
                     }
                 }
             }
-            
-            self.saveCategoryData()
         }
         
         alert.addTextField{ (alertTextField) in

@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import CoreData
 
 extension ToDoListViewController : UISearchBarDelegate {
     
@@ -15,13 +14,11 @@ extension ToDoListViewController : UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
-        let searchRequest : NSFetchRequest<ToDoListItemModel> = ToDoListItemModel.fetchRequest()
+        toDoItems = toDoItems?
+            .filter("listItemEntry CONTAINS[cd] %@", searchBar.text!)
+            .sorted(byKeyPath: "dateCreated", ascending: false)
         
-        let searchPredicate = NSPredicate(format: "listItemEntry CONTAINS[cd] %@", searchBar.text!)
-        
-        searchRequest.sortDescriptors = [NSSortDescriptor(key: "listItemEntry", ascending: true)]
-        
-        loadUserData(with: searchRequest, andPredicate: searchPredicate)
+        loadUserData()
         
     }
     
