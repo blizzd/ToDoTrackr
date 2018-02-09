@@ -10,7 +10,7 @@ import UIKit
 
 extension ToDoListViewController : UISearchBarDelegate {
     
-    //MARK: - search bar delegates
+    //MARK: - Search Bar delegates
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         

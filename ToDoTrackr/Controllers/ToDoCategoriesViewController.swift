@@ -8,6 +8,7 @@
 
 import UIKit
 import RealmSwift
+import SwipeCellKit
 
 class ToDoCategoriesViewController: UITableViewController {
 
@@ -18,9 +19,11 @@ class ToDoCategoriesViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.register(UINib(nibName: "ToDoItemCell", bundle: nil), forCellReuseIdentifier: "toDoItemCell")
+        //tableView.register(UINib(nibName: "ToDoItemCell", bundle: nil), forCellReuseIdentifier: "toDoItemCell")
         
         loadCategoryData()
+        
+        tableView.rowHeight = 80.0
     }
 
     // MARK: - Table view data source
@@ -32,11 +35,11 @@ class ToDoCategoriesViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "toDoItemCell", for: indexPath) as! ToDoItemCell
-        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "swipeCell", for: indexPath) as! SwipeTableViewCell
         let itemCell = categoryItems?[indexPath.row]
+        cell.textLabel?.text = itemCell?.categoryName ?? "No Categories Yet"
         
-        cell.toDoLabel.text = itemCell?.categoryName ?? "No Categories Yet"
+        cell.delegate = self
         
         return cell
     }

@@ -8,5 +8,7 @@ target 'ToDoTrackr' do
   # Pods for ToDoTrackr
 
 pod 'RealmSwift'
+pod 'SwipeCellKit'
+pod 'ChameleonFramework'
 
 end
