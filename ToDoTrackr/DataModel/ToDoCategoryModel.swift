@@ -8,9 +8,11 @@
 
 import Foundation
 import RealmSwift
+import ChameleonFramework
 
 class ToDoCategoryModel: Object {
     @objc dynamic var categoryName: String = ""
+    @objc dynamic var categoryColor: String = UIColor.flatWhite().hexValue()
     
     let toDoItems = List<ToDoListItemModel>()
     

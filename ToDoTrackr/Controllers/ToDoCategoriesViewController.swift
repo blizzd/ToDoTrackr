@@ -9,6 +9,7 @@
 import UIKit
 import RealmSwift
 import SwipeCellKit
+import ChameleonFramework
 
 class ToDoCategoriesViewController: SwipeTableViewController {
 
@@ -35,7 +36,12 @@ class ToDoCategoriesViewController: SwipeTableViewController {
         
         let itemCell = categoryItems?[indexPath.row]
         
+        let cellColor = UIColor(hexString: itemCell?.categoryColor ?? UIColor.flatSkyBlue().hexValue())
+        
         cell.textLabel?.text = itemCell?.categoryName ?? "No Categories Yet"
+        cell.textLabel?.textColor = UIColor(contrastingBlackOrWhiteColorOn: cellColor, isFlat: true)
+        
+        cell.backgroundColor = cellColor
         
         return cell
     }
@@ -113,6 +119,7 @@ class ToDoCategoriesViewController: SwipeTableViewController {
                 if textArray.isEmpty {
                     let cellItem = ToDoCategoryModel()
                     cellItem.categoryName = "Some new category"
+                    cellItem.categoryColor = UIColor.randomFlat().hexValue()
                     self.saveCategoryData(cellItem)
                     
                 } else {
@@ -120,6 +127,7 @@ class ToDoCategoriesViewController: SwipeTableViewController {
                         (text) in
                         let cellItem = ToDoCategoryModel()
                         cellItem.categoryName = String(text.trimmingCharacters(in: .whitespacesAndNewlines))
+                        cellItem.categoryColor = UIColor.randomFlat().hexValue()
                         self.saveCategoryData(cellItem)
                     }
                 }
