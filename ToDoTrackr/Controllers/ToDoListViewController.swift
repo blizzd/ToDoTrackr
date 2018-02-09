@@ -9,7 +9,7 @@
 import UIKit
 import RealmSwift
 
-class ToDoListViewController: UITableViewController{
+class ToDoListViewController: SwipeTableViewController{
 
     let realm = try! Realm()
     
@@ -24,9 +24,6 @@ class ToDoListViewController: UITableViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        tableView.register(UINib(nibName: "ToDoItemCell", bundle: nil), forCellReuseIdentifier: "toDoItemCell")
-
     }
 
     //MARK - Tableview Datasource methods
@@ -38,14 +35,14 @@ class ToDoListViewController: UITableViewController{
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "toDoItemCell", for: indexPath) as! ToDoItemCell
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         
         if let itemCell = toDoItems?[indexPath.row] {
         
-            cell.toDoLabel.text = itemCell.listItemEntry
+            cell.textLabel?.text = itemCell.listItemEntry
             cell.accessoryType = itemCell.checkedItem == true ? .checkmark : .none
         } else {
-            cell.toDoLabel.text = "No Items Added"
+            cell.textLabel?.text = "No Items Added"
         }
         
         return cell
@@ -136,16 +133,16 @@ class ToDoListViewController: UITableViewController{
     }
     
     //MARK: - Model manipulation
-    func saveUserData(_ item: ToDoListItemModel) {
+    override func updateModel(at indexPath: IndexPath) {
         do {
-            try realm.write {
-                realm.add(item)
+            try self.realm.write {
+                if let toDoItem = self.toDoItems?[indexPath.row] {
+                    self.realm.delete(toDoItem)
+                }
             }
         } catch {
-            print("Error saving database, \(error)")
+            print("Error removing an item \(error)")
         }
-        
-        tableView.reloadData()
     }
     
     func loadUserData() {

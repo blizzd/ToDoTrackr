@@ -13,7 +13,18 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        tableView.rowHeight = 80.0
+    }
+    
+    //MARK: - Table Source
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "swipeCell", for: indexPath) as! SwipeTableViewCell
+       
+        cell.delegate = self
+        
+        return cell
     }
 
     //MARK: - Swipe Cell delegates
@@ -22,15 +33,7 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
         
         let deleteAction = SwipeAction(style: .destructive, title: "Delete") { (action, indexPath) in
             //update after deleting a cell
-            do {
-                try self.realm.write {
-                    if let categoryItem = self.categoryItems?[indexPath.row] {
-                        self.realm.delete(categoryItem)
-                    }
-                }
-            } catch {
-                print("Error removing an item \(error)")
-            }
+            self.updateModel(at: indexPath)
         }
         
         // customize the appearance
@@ -46,6 +49,12 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
         swipeOptions.transitionStyle = .reveal
         
         return swipeOptions
+    }
+    
+    //MARK: - Update Models
+    
+    func updateModel(at indexPath:IndexPath) {
+        //update model on subclasses
     }
    
 

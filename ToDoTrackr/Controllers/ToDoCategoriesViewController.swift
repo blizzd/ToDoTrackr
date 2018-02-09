@@ -10,7 +10,7 @@ import UIKit
 import RealmSwift
 import SwipeCellKit
 
-class ToDoCategoriesViewController: UITableViewController {
+class ToDoCategoriesViewController: SwipeTableViewController {
 
     let realm = try! Realm()
     
@@ -19,11 +19,7 @@ class ToDoCategoriesViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //tableView.register(UINib(nibName: "ToDoItemCell", bundle: nil), forCellReuseIdentifier: "toDoItemCell")
-        
         loadCategoryData()
-        
-        tableView.rowHeight = 80.0
     }
 
     // MARK: - Table view data source
@@ -35,11 +31,11 @@ class ToDoCategoriesViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "swipeCell", for: indexPath) as! SwipeTableViewCell
-        let itemCell = categoryItems?[indexPath.row]
-        cell.textLabel?.text = itemCell?.categoryName ?? "No Categories Yet"
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         
-        cell.delegate = self
+        let itemCell = categoryItems?[indexPath.row]
+        
+        cell.textLabel?.text = itemCell?.categoryName ?? "No Categories Yet"
         
         return cell
     }
@@ -80,6 +76,21 @@ class ToDoCategoriesViewController: UITableViewController {
         tableView.reloadData()
         
     }
+    
+    //MARK: - Deleta data from Swipe
+    
+    override func updateModel(at indexPath: IndexPath) {
+        do {
+            try self.realm.write {
+                if let categoryItem = self.categoryItems?[indexPath.row] {
+                    self.realm.delete(categoryItem)
+                }
+            }
+        } catch {
+            print("Error removing an item \(error)")
+        }
+    }
+    
     
     //MARK: - Add new Categories
     
