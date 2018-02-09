@@ -1,0 +1,6 @@
+framework module Pods_ToDoTrackr {
+  umbrella header "Pods-ToDoTrackr-umbrella.h"
+
+  export *
+  module * { export * }
+}
