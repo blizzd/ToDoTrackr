@@ -18,7 +18,7 @@ extension ToDoListViewController : UISearchBarDelegate {
             .filter("listItemEntry CONTAINS[cd] %@", searchBar.text!)
             .sorted(byKeyPath: "dateCreated", ascending: false)
         
-        loadUserData()
+        tableView.reloadData()
         
     }
     
