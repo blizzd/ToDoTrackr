@@ -11,12 +11,11 @@ Simple to do trackr for all of your to-do list needs
 
 # Screens
 
-![alt text](https://raw.githubusercontent.com/blizzd/ToDoTrackr/master/Page%201.png "Add multiple categories")
-![alt text](https://raw.githubusercontent.com/blizzd/ToDoTrackr/master/Page%202.png "Each category gets a random color")
-![alt text](https://raw.githubusercontent.com/blizzd/ToDoTrackr/master/Page%203.png "Add todos for you Category")
-![alt text](https://raw.githubusercontent.com/blizzd/ToDoTrackr/master/Page%204.png "Search through your todos")
-![alt text](https://raw.githubusercontent.com/blizzd/ToDoTrackr/master/Page%205.png "Delete a to do by swiping")
-![alt text](https://raw.githubusercontent.com/blizzd/ToDoTrackr/master/Page%206.png "Check finished todos or delete them")
+<img src="https://raw.githubusercontent.com/blizzd/ToDoTrackr/master/Page%201.png" width=250 alt="Add multiple categories" hspace=20/><img src="https://raw.githubusercontent.com/blizzd/ToDoTrackr/master/Page%202.png" width=250 alt="Each category gets a random color" hspace=20/><img src="https://raw.githubusercontent.com/blizzd/ToDoTrackr/master/Page%203.png" width=250 alt="Add todos for you Category" hspace=20/>
+
+<img src="https://raw.githubusercontent.com/blizzd/ToDoTrackr/master/Page%204.png" width=250 alt="Search through your todos" hspace=20/><img src="https://raw.githubusercontent.com/blizzd/ToDoTrackr/master/Page%205.png" width=250 alt="Delete a to do by swiping" hspace=20/><img src="https://raw.githubusercontent.com/blizzd/ToDoTrackr/master/Page%206.png" width=250 alt="Check finished todos or delete them" hspace=20/>
+
+
 
 # Want a demo on your device ?
 E-mail me at <blizzishere@icloud.com> with the subject "ToDoTrackr TestFlight Request"
