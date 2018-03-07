@@ -11,9 +11,9 @@ Simple to do trackr for all of your to-do list needs
 
 # Screens
 
-<img src="https://raw.githubusercontent.com/blizzd/ToDoTrackr/master/Page%201.png" width=250 alt="Add multiple categories" hspace=20/><img src="https://raw.githubusercontent.com/blizzd/ToDoTrackr/master/Page%202.png" width=250 alt="Each category gets a random color" hspace=20/><img src="https://raw.githubusercontent.com/blizzd/ToDoTrackr/master/Page%203.png" width=250 alt="Add todos for you Category" hspace=20/>
+<kbd><img src="https://raw.githubusercontent.com/blizzd/ToDoTrackr/master/Page%201.png" width=250 alt="Add multiple categories" hspace=10/></kbd><kbd><img src="https://raw.githubusercontent.com/blizzd/ToDoTrackr/master/Page%202.png" width=250 alt="Each category gets a random color" hspace=10/></kbd><kbd><img src="https://raw.githubusercontent.com/blizzd/ToDoTrackr/master/Page%203.png" width=250 alt="Add todos for you Category" hspace=10/></kbd>
 
-<img src="https://raw.githubusercontent.com/blizzd/ToDoTrackr/master/Page%204.png" width=250 alt="Search through your todos" hspace=20/><img src="https://raw.githubusercontent.com/blizzd/ToDoTrackr/master/Page%205.png" width=250 alt="Delete a to do by swiping" hspace=20/><img src="https://raw.githubusercontent.com/blizzd/ToDoTrackr/master/Page%206.png" width=250 alt="Check finished todos or delete them" hspace=20/>
+<kbd><img src="https://raw.githubusercontent.com/blizzd/ToDoTrackr/master/Page%204.png" width=250 alt="Search through your todos" hspace=10/></kbd><kbd><img src="https://raw.githubusercontent.com/blizzd/ToDoTrackr/master/Page%205.png" width=250 alt="Delete a to do by swiping" hspace=10/></kbd><kbd><img src="https://raw.githubusercontent.com/blizzd/ToDoTrackr/master/Page%206.png" width=250 alt="Check finished todos or delete them" hspace=10/></kbd>
 
 
 
