@@ -18,7 +18,7 @@ Simple to do trackr for all of your to-do list needs
 
 
 # Want a demo on your device ?
-E-mail me at <blizzishere@icloud.com> with the subject "ToDoTrackr TestFlight Request"
+E-mail me at <blizzishere@icloud.com> with the subject "ToDoTrackr Test Request"
 or clone it and build it on your macOS device :D
 
 # License
