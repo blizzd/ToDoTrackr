@@ -10,5 +10,7 @@ target 'ToDoTrackr' do
 pod 'RealmSwift'
 pod 'SwipeCellKit'
 pod 'ChameleonFramework'
+pod 'Fabric'
+pod 'Crashlytics'
 
 end

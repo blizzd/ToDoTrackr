@@ -46,7 +46,7 @@ class ToDoListViewController: SwipeTableViewController{
     
     //update the color before moving the view
     
-    override func willMove(toParentViewController parent: UIViewController?) {
+    override func willMove(toParent parent: UIViewController?) {
         guard let originalColor = UIColor.flatSkyBlue().hexValue() else { fatalError() }
         
         updateNavigationBar(withHexCode: originalColor)
@@ -67,9 +67,9 @@ class ToDoListViewController: SwipeTableViewController{
         currentNavBar.tintColor = contrastNavColor
         
         if #available(iOS 11.0, *) {
-            currentNavBar.largeTitleTextAttributes = [NSAttributedStringKey.foregroundColor : contrastNavColor]
+            currentNavBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor : contrastNavColor]
         } else {
-            currentNavBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor : contrastNavColor]
+            currentNavBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : contrastNavColor]
         }
         
         searchBar.barTintColor = navBarColor
