@@ -8,8 +8,6 @@
 
 import UIKit
 import RealmSwift
-import Fabric
-import Crashlytics
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -26,9 +24,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } catch {
             print("Error initializing new realm, \(error)")
         }
-        
-        //Fabric
-        Fabric.with([Crashlytics.self])
         
         return true
     }
